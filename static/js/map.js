@@ -764,6 +764,10 @@ var StoreOptions = {
     default: false,
     type: StoreTypes.Boolean
   },
+  'playCries': {
+    default: false,
+    type: StoreTypes.Boolean
+  },
   'geoLocate': {
     default: false,
     type: StoreTypes.Boolean
@@ -1007,6 +1011,8 @@ function initSidebar () {
   $('#spawnpoints-switch').prop('checked', Store.get('showSpawnpoints'))
   $('#ranges-switch').prop('checked', Store.get('showRanges'))
   $('#sound-switch').prop('checked', Store.get('playSound'))
+  $('#cry-switch').prop('checked', Store.get('playCries'))
+  $('#use-cries-wrapper').toggle(Store.get('playSound'))
   var searchBox = new google.maps.places.SearchBox(document.getElementById('next-location'))
   $('#next-location').css('background-color', $('#geoloc-switch').prop('checked') ? '#e0e0e0' : '#ffffff')
 
@@ -1310,7 +1316,12 @@ function setupPokemonMarker (item, skipNotification, isBounceDisabled) {
   if (notifiedPokemon.indexOf(item['pokemon_id']) > -1 || notifiedRarity.indexOf(item['pokemon_rarity']) > -1) {
     if (!skipNotification) {
       if (Store.get('playSound')) {
-        audio.play()
+        if (Store.get('playCries')) {
+          audio = new Audio('static/sounds/cries/' + item['pokemon_id'] + '.mp3')
+          audio.play()
+        } else {
+          audio.play()
+        }
       }
       sendNotification('A wild ' + item['pokemon_name'] + ' appeared!', 'Click to load map', 'static/icons/' + item['pokemon_id'] + '.png', item['latitude'], item['longitude'])
     }
@@ -2249,6 +2260,20 @@ $(function () {
 
   $('#sound-switch').change(function () {
     Store.set('playSound', this.checked)
+    var options = {
+      'duration': 500
+    }
+    var wrapper = $('#use-cries-wrapper')
+    if (this.checked) {
+      wrapper.show(options)
+    } else {
+      wrapper.hide(options)
+      $('#cry-switch').prop('checked', false)
+    }
+  })
+
+  $('#cry-switch').change(function () {
+    Store.set('playCries', this.checked)
   })
 
   $('#geoloc-switch').change(function () {
