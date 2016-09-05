@@ -768,6 +768,10 @@ var StoreOptions = {
     default: false,
     type: StoreTypes.Boolean
   },
+  'TTS': {
+    default: false,
+    type: StoreTypes.Boolean
+  },
   'geoLocate': {
     default: false,
     type: StoreTypes.Boolean
@@ -1012,6 +1016,7 @@ function initSidebar () {
   $('#ranges-switch').prop('checked', Store.get('showRanges'))
   $('#sound-switch').prop('checked', Store.get('playSound'))
   $('#cry-switch').prop('checked', Store.get('playCries'))
+  $('#tts-switch').prop('checked', Store.get('TTS'))
   $('#use-cries-wrapper').toggle(Store.get('playSound'))
   var searchBox = new google.maps.places.SearchBox(document.getElementById('next-location'))
   $('#next-location').css('background-color', $('#geoloc-switch').prop('checked') ? '#e0e0e0' : '#ffffff')
@@ -1319,6 +1324,16 @@ function setupPokemonMarker (item, skipNotification, isBounceDisabled) {
         if (Store.get('playCries')) {
           audio = new Audio('static/sounds/cries/' + item['pokemon_id'] + '.mp3')
           audio.play()
+        } else if (Store.get('TTS')) {
+          if ('speechSynthesis' in window) {
+            var speech = new SpeechSynthesisUtterance('A wild' + item['pokemon_name'] + 'appeared!')
+            var voices = window.speechSynthesis.getVoices()
+
+            speech.voice = voices.filter(function (voice) { return voice.name === 'Google US English' })[0]
+            console.log(voices)
+
+            window.speechSynthesis.speak(speech)
+          }
         } else {
           audio.play()
         }
@@ -2269,11 +2284,20 @@ $(function () {
     } else {
       wrapper.hide(options)
       $('#cry-switch').prop('checked', false)
+      $('#tts-switch').prop('checked', false)
     }
   })
 
   $('#cry-switch').change(function () {
     Store.set('playCries', this.checked)
+    Store.set('TTS', false)
+    $('#tts-switch').prop('checked', false)
+  })
+
+  $('#tts-switch').change(function () {
+    Store.set('TTS', this.checked)
+    Store.set('playCries', false)
+    $('#cry-switch').prop('checked', false)
   })
 
   $('#geoloc-switch').change(function () {
