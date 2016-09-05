@@ -835,6 +835,13 @@ var Store = {
 // Functions
 //
 
+// The SpeechSynthesis voices must load asyncronously before they can be used by the alerts, so we create the variable after that
+var USEnglish
+window.speechSynthesis.onvoiceschanged = function () {
+  var voices = window.speechSynthesis.getVoices()
+  USEnglish = voices.filter(function (voice) { return voice.name === 'Google US English' })[0]
+}
+
 function excludePokemon (id) { // eslint-disable-line no-unused-vars
   $selectExclude.val(
     $selectExclude.val().concat(id)
@@ -1327,10 +1334,7 @@ function setupPokemonMarker (item, skipNotification, isBounceDisabled) {
         } else if (Store.get('TTS')) {
           if ('speechSynthesis' in window) {
             var speech = new SpeechSynthesisUtterance('A wild' + item['pokemon_name'] + 'appeared!')
-            var voices = window.speechSynthesis.getVoices()
-
-            speech.voice = voices.filter(function (voice) { return voice.name === 'Google US English' })[0]
-            console.log(voices)
+            speech.voice = USEnglish
 
             window.speechSynthesis.speak(speech)
           }
