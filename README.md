@@ -24,7 +24,7 @@ This software is made for learning and experimental purposes, and using it viola
 ### Features added in this fork:
 
 * Pokémon sounds from the original Game Boy series added as an option for notifications.
-* Text-to-speech Pokémon name notification option.
+* Text-to-speech option for notifications (Chrome only!).
 
 ## Installation
 
