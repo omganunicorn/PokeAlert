@@ -65,7 +65,7 @@ var audio = new Audio('static/sounds/ding.mp3')
 // Functions
 //
 
-// The SpeechSynthesis voices must load asyncronously before they can be used by the alerts, so we create the variable after that
+// The SpeechSynthesis voices must load asyncronously before they can be used by the alerts
 var USEnglish
 window.speechSynthesis.onvoiceschanged = function () {
   var voices = window.speechSynthesis.getVoices()
@@ -616,7 +616,7 @@ function customizePokemonMarker (marker, item, skipNotification) {
           audio.play()
         } else if (Store.get('TTS')) {
           if ('speechSynthesis' in window) {
-            var speech = new SpeechSynthesisUtterance('A wild' + item['pokemon_name'] + 'appeared!')
+            var speech = new SpeechSynthesisUtterance('A wild ' + item['pokemon_name'] + ' appeared!')
             speech.voice = USEnglish
 
             window.speechSynthesis.speak(speech)
