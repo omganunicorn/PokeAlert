@@ -724,6 +724,14 @@ var StoreOptions = {
     default: false,
     type: StoreTypes.Boolean
   },
+  'playCries': {
+    default: false,
+    type: StoreTypes.Boolean
+  },
+  'TTS': {
+    default: false,
+    type: StoreTypes.Boolean
+  },
   'geoLocate': {
     default: false,
     type: StoreTypes.Boolean
