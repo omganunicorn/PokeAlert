@@ -64,12 +64,14 @@ var audio = new Audio('static/sounds/ding.mp3')
 //
 // Functions
 //
+
 // The SpeechSynthesis voices must load asyncronously before they can be used by the alerts
 var USEnglish
 window.speechSynthesis.onvoiceschanged = function () {
   var voices = window.speechSynthesis.getVoices()
   USEnglish = voices.filter(function (voice) { return voice.name === 'Google US English' })[0]
 }
+
 function excludePokemon (id) { // eslint-disable-line no-unused-vars
   $selectExclude.val(
     $selectExclude.val().concat(id)
